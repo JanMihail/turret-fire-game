@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Pushka : MonoBehaviour
 {
+    // public Rigidbody root;
     public Rigidbody dulo;
     public Rigidbody koleso;
     public Rigidbody bulletPrefab;
@@ -46,18 +47,19 @@ public class Pushka : MonoBehaviour
 
     private void updateRotateKoleso()
     {
+        // root.AddForce(Vector3.right * moveHoriz * moveHorizSpeed * Time.deltaTime, ForceMode.VelocityChange);
         koleso.AddTorque(Vector3.forward * -moveHoriz * moveHorizSpeed * Time.deltaTime, ForceMode.VelocityChange);
     }
 
     private void updateRotateDulo()
     {
-        duloHingeJoint.useSpring = false;
+        // duloHingeJoint.useSpring = false;
 
         JointSpring spring = duloHingeJoint.spring;
         spring.targetPosition = duloAngle;
         duloHingeJoint.spring = spring;
         
-        duloHingeJoint.useSpring = true;
+        // duloHingeJoint.useSpring = true;
     }
 
     private void updateFire()
@@ -70,7 +72,7 @@ public class Pushka : MonoBehaviour
         Vector3 force = bulletShootPoint.forward * bulletForce;
         Rigidbody bullet = Instantiate(bulletPrefab, bulletShootPoint.position, bulletShootPoint.rotation);
         bullet.AddForce(force, ForceMode.VelocityChange);
-        dulo.AddForceAtPosition(-force * bulletForce / 3, bulletShootPoint.position, ForceMode.Impulse);
+        dulo.AddForceAtPosition(-force * bulletForce, bulletShootPoint.position, ForceMode.Impulse);
         
         isFire = false;
     }
