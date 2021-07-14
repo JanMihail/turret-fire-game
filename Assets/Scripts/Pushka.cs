@@ -38,6 +38,11 @@ public class Pushka : MonoBehaviour
         isFire = true;
     }
 
+    public Vector3 getKolesoPosition()
+    {
+        return koleso.transform.position;
+    }
+
     void FixedUpdate()
     {
         updateRotateKoleso();
