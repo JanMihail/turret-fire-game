@@ -4,60 +4,45 @@ public class PushkaMoveTouchController : MonoBehaviour
 {
     public Pushka pushka;
 
-    private bool isFirstTouched = false;
-    private bool isTouchedKoleso;
-
-    private Touch touch;
+    private bool isExistTouch = false;
+    private bool isCheckedRayIntersect = false;
+    private bool isTouchedKoleso = false;
 
     void Update()
     {
-        if (Input.touchCount > 0)
+        if (isExistTouch)
         {
-            touch = Input.GetTouch(0);
-        }
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            isFirstTouched = true;
-            touch = Input.GetTouch(0);
-        }
-
-        if (Input.touchCount > 0)
-        {
-            isTouchedKoleso = isTouchedKoleso && Input.GetTouch(0).phase == TouchPhase.Moved;
-
-            if (isTouchedKoleso)
+            if (Input.touchCount == 0)
             {
-                Vector3 kolesoVP = Camera.main.WorldToViewportPoint(pushka.getKolesoPosition());
-                Vector3 touchVP = Camera.main.ScreenToViewportPoint(Input.GetTouch(0).position);
-
-                pushka.move(touchVP.x > kolesoVP.x ? 1f : -1f);
-            }
-            else
-            {
-                pushka.move(0f);
+                isExistTouch = false;
+                isCheckedRayIntersect = false;
+                isTouchedKoleso = false;
             }
         }
-    }
+        else
+        {
+            if (Input.touchCount == 1)
+            {
+                isExistTouch = true;
+            }
+        }
 
-    private void OnGUI()
-    {
-        GUI.skin.label.fontSize = 50;
-        GUILayout.BeginArea(new Rect(10, 10, 1000, 800));
-        GUILayout.Label("rawPosition: " + touch.rawPosition.ToString("F3"));
-        GUILayout.Label("position: " + touch.position.ToString("F3"));
-        GUILayout.Label("deltaPosition: " + touch.deltaPosition.ToString("F3"));
-        GUILayout.Label("fingerId: " + touch.fingerId);
-        GUILayout.Label("pressure: " + touch.pressure.ToString("F3"));
-        GUILayout.Label("phase: " + touch.phase.ToString());
-        GUILayout.EndArea();
+        if (isTouchedKoleso)
+        {
+            Vector3 touchWP = Camera.main.ScreenToWorldPoint(new Vector3(
+                Input.GetTouch(0).position.x,
+                Input.GetTouch(0).position.y,
+                -Camera.main.transform.position.z));
+            pushka.moveHorizontal(touchWP.x);
+        }
     }
 
     void FixedUpdate()
     {
-        if (isFirstTouched)
+        if (!isCheckedRayIntersect && isExistTouch)
         {
-            isFirstTouched = false;
-
+            isCheckedRayIntersect = true;
+            Touch touch = Input.GetTouch(0);
             Vector3 touchPosNear = Camera.main.ScreenToWorldPoint(new Vector3(touch.rawPosition.x, touch.rawPosition.y, Camera.main.nearClipPlane));
             Vector3 touchPosFar = Camera.main.ScreenToWorldPoint(new Vector3(touch.rawPosition.x, touch.rawPosition.y, Camera.main.farClipPlane));
 
@@ -68,15 +53,16 @@ public class PushkaMoveTouchController : MonoBehaviour
                 out hit,
                 Mathf.Infinity,
                 LayerMask.GetMask("PushkaKoleso"));
+
             /*
-                        if (isTouchedKoleso)
-                        {
-                            Debug.DrawRay(touchPosNear, Vector3.Normalize(touchPosFar - touchPosNear) * hit.distance, Color.green);
-                        }
-                        else
-                        {
-                            Debug.DrawRay(touchPosNear, touchPosFar - touchPosNear, Color.red);
-                        }
+            if (isTouchedKoleso)
+            {
+                Debug.DrawRay(touchPosNear, Vector3.Normalize(touchPosFar - touchPosNear) * hit.distance, Color.green);
+            }
+            else
+            {
+                Debug.DrawRay(touchPosNear, touchPosFar - touchPosNear, Color.red);
+            }
             */
         }
     }

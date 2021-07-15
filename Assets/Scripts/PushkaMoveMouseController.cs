@@ -4,41 +4,46 @@ public class PushkaMoveMouseController : MonoBehaviour
 {
     public Pushka pushka;
 
-    private bool isFirstTouched = false;
-    private bool isTouchedKoleso;
-
-    private Vector3 firstTouchPos;
+    private bool isExistTouch = false;
+    private bool isCheckedRayIntersect = false;
+    private bool isTouchedKoleso = false;
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (isExistTouch)
         {
-            isFirstTouched = true;
-            firstTouchPos = Input.mousePosition;
+            if (!Input.GetMouseButton(0))
+            {
+                isExistTouch = false;
+                isCheckedRayIntersect = false;
+                isTouchedKoleso = false;
+            }
         }
-
-        isTouchedKoleso = isTouchedKoleso && Input.GetMouseButton(0);
+        else
+        {
+            if (Input.GetMouseButton(0))
+            {
+                isExistTouch = true;
+            }
+        }
 
         if (isTouchedKoleso)
         {
-            Vector3 kolesoVP = Camera.main.WorldToViewportPoint(pushka.getKolesoPosition());
-            Vector3 touchVP = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-
-            pushka.move(touchVP.x > kolesoVP.x ? 1f : -1f);
-        } else
-        {
-            pushka.move(0f);
+            Vector3 touchWP = Camera.main.ScreenToWorldPoint(new Vector3(
+                Input.mousePosition.x,
+                Input.mousePosition.y,
+                -Camera.main.transform.position.z));
+            pushka.moveHorizontal(touchWP.x);
         }
     }
 
     void FixedUpdate()
     {
-        if (isFirstTouched)
+        if (!isCheckedRayIntersect && isExistTouch)
         {
-            isFirstTouched = false;
-
-            Vector3 touchPosNear = Camera.main.ScreenToWorldPoint(new Vector3(firstTouchPos.x, firstTouchPos.y, Camera.main.nearClipPlane));
-            Vector3 touchPosFar = Camera.main.ScreenToWorldPoint(new Vector3(firstTouchPos.x, firstTouchPos.y, Camera.main.farClipPlane));
+            isCheckedRayIntersect = true;
+            Vector3 touchPosNear = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
+            Vector3 touchPosFar = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.farClipPlane));
 
             RaycastHit hit;
             isTouchedKoleso = Physics.Raycast(
@@ -47,7 +52,8 @@ public class PushkaMoveMouseController : MonoBehaviour
                 out hit,
                 Mathf.Infinity,
                 LayerMask.GetMask("PushkaKoleso"));
-            
+
+            /*
             if (isTouchedKoleso)
             {
                 Debug.DrawRay(touchPosNear, Vector3.Normalize(touchPosFar - touchPosNear) * hit.distance, Color.green);
@@ -56,7 +62,7 @@ public class PushkaMoveMouseController : MonoBehaviour
             {
                 Debug.DrawRay(touchPosNear, touchPosFar - touchPosNear, Color.red);
             }
+            */
         }
     }
-
 }

@@ -1,20 +1,17 @@
-using System;
 using UnityEngine;
 
 public class Pushka : MonoBehaviour
 {
-    // public Rigidbody root;
-    public Rigidbody dulo;
-    public Rigidbody koleso;
-    public Rigidbody bulletPrefab;
-    public Transform bulletShootPoint;
+    [SerializeField] private Transform root;
+    [SerializeField] private Rigidbody dulo;
+    [SerializeField] private Rigidbody koleso;
+    [SerializeField] private Rigidbody bulletPrefab;
+    [SerializeField] private Transform bulletShootPoint;
+    [SerializeField] private Transform platformToMove;
 
-    public float moveHorizSpeed = 500f;
-    // public float duloRotateSpeed = 100f;
-    public float bulletForce = 20f;
+    [SerializeField] private float bulletForce = 20f;
 
     private HingeJoint duloHingeJoint;
-    private float moveHoriz = 0;
     private float duloAngle = 0;
     private bool isFire = false;
     
@@ -23,9 +20,11 @@ public class Pushka : MonoBehaviour
         duloHingeJoint = dulo.GetComponent<HingeJoint>();
     }
 
-    public void move(float horizontal)
+    public void moveHorizontal(float worldCoordX)
     {
-        moveHoriz = horizontal;
+        Vector3 curPos = platformToMove.position;
+        curPos.x = worldCoordX;
+        platformToMove.position = curPos;
     }
 
     public void rotateDulo(float angle)
@@ -38,33 +37,29 @@ public class Pushka : MonoBehaviour
         isFire = true;
     }
 
-    public Vector3 getKolesoPosition()
+    void Update()
     {
-        return koleso.transform.position;
+        updatePlatformToMovePosition();
     }
 
     void FixedUpdate()
     {
-        updateRotateKoleso();
         updateRotateDulo();
         updateFire();
     }
 
-    private void updateRotateKoleso()
+    private void updatePlatformToMovePosition()
     {
-        // root.AddForce(Vector3.right * moveHoriz * moveHorizSpeed * Time.deltaTime, ForceMode.VelocityChange);
-        koleso.AddTorque(Vector3.forward * -moveHoriz * moveHorizSpeed * Time.deltaTime, ForceMode.VelocityChange);
+        Vector3 curPos = platformToMove.position;
+        curPos.y = root.position.y;
+        platformToMove.position = curPos;
     }
 
     private void updateRotateDulo()
     {
-        // duloHingeJoint.useSpring = false;
-
         JointSpring spring = duloHingeJoint.spring;
         spring.targetPosition = duloAngle;
         duloHingeJoint.spring = spring;
-        
-        // duloHingeJoint.useSpring = true;
     }
 
     private void updateFire()
