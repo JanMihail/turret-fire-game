@@ -927,10 +927,45 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 125419853}
     m_Modifications:
+    - target: {fileID: 2260071516472263915, guid: 1312b889849e05e41871542f458a0d3e,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: -0.05846703
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260071516472263915, guid: 1312b889849e05e41871542f458a0d3e,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: -0.11793181
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260071516472263915, guid: 1312b889849e05e41871542f458a0d3e,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: -1.929148
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184281577316799737, guid: 1312b889849e05e41871542f458a0d3e,
+        type: 3}
+      propertyPath: bulletForce
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5184281577316799738, guid: 1312b889849e05e41871542f458a0d3e,
         type: 3}
       propertyPath: m_Name
       value: Pushka
+      objectReference: {fileID: 0}
+    - target: {fileID: 5418724741276547143, guid: 1312b889849e05e41871542f458a0d3e,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: -0.072999954
+      objectReference: {fileID: 0}
+    - target: {fileID: 5418724741276547143, guid: 1312b889849e05e41871542f458a0d3e,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 1.0126247
+      objectReference: {fileID: 0}
+    - target: {fileID: 5418724741276547143, guid: 1312b889849e05e41871542f458a0d3e,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: 0.04312241
       objectReference: {fileID: 0}
     - target: {fileID: 5528612797323251264, guid: 1312b889849e05e41871542f458a0d3e,
         type: 3}

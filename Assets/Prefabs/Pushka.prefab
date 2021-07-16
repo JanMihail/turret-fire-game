@@ -240,7 +240,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.05846703, y: -0.11793181, z: -1.929148}
+  m_ConnectedAnchor: {x: -0.058467746, y: -0.11793047, z: -1.9291475}
   m_UseSpring: 0
   m_Spring:
     spring: 0
@@ -391,11 +391,11 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.072999954, y: 1.0126247, z: 0.04312241}
+  m_ConnectedAnchor: {x: -0.07300079, y: 1.0126241, z: 0.04312265}
   m_UseSpring: 1
   m_Spring:
-    spring: 100
-    damper: 50
+    spring: 1000
+    damper: 100
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
@@ -470,7 +470,7 @@ MonoBehaviour:
     type: 3}
   bulletShootPoint: {fileID: 5418724741856489337}
   platformToMove: {fileID: 5012261695571971341}
-  bulletForce: 5
+  bulletForceMultiplier: 8
 --- !u!1 &5418724740481099209
 GameObject:
   m_ObjectHideFlags: 0

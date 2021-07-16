@@ -8,16 +8,21 @@ public class Pushka : MonoBehaviour
     [SerializeField] private Rigidbody bulletPrefab;
     [SerializeField] private Transform bulletShootPoint;
     [SerializeField] private Transform platformToMove;
-
-    [SerializeField] private float bulletForce = 20f;
+    [SerializeField] private float bulletForceMultiplier = 8f;
 
     private HingeJoint duloHingeJoint;
     private float duloAngle = 0;
     private bool isFire = false;
+    private float bulletForce = 0;
     
     void Start()
     {
         duloHingeJoint = dulo.GetComponent<HingeJoint>();
+    }
+
+    public Vector3 getDuloRotatePoint()
+    {
+        return dulo.transform.position;
     }
 
     public void moveHorizontal(float worldCoordX)
@@ -32,8 +37,9 @@ public class Pushka : MonoBehaviour
         duloAngle = Mathf.Clamp(angle, -90, 90);
     }
 
-    public void fire()
+    public void fire(float bulletForce)
     {
+        this.bulletForce = bulletForce * bulletForceMultiplier;
         isFire = true;
     }
 
@@ -58,7 +64,7 @@ public class Pushka : MonoBehaviour
     private void updateRotateDulo()
     {
         JointSpring spring = duloHingeJoint.spring;
-        spring.targetPosition = duloAngle;
+        spring.targetPosition = -duloAngle;
         duloHingeJoint.spring = spring;
     }
 
