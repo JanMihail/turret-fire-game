@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private float lifeTimeSeconds = 300f;
+
     void Start()
     {
-        Destroy(gameObject, 300);
+        Destroy(gameObject, lifeTimeSeconds);
     }
 }

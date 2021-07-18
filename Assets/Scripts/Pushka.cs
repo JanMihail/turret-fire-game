@@ -7,11 +7,18 @@ public class Pushka : MonoBehaviour
     [SerializeField] private Rigidbody koleso;
     [SerializeField] private Rigidbody bulletPrefab;
     [SerializeField] private Transform bulletShootPoint;
-    [SerializeField] private Transform platformToMove;
+    [SerializeField] private float moveHorizSpeedMultiplier = 10f;
+    [SerializeField] private float duloRotateSpeedMultiplier = 0.05f;
     [SerializeField] private float bulletForceMultiplier = 8f;
+    
+    // Moving
+    private float moveSpeed = 0f;
 
+    // Rotating dulo
     private HingeJoint duloHingeJoint;
     private float duloAngle = 0;
+
+    // Fire
     private bool isFire = false;
     private float bulletForce = 0;
     
@@ -20,21 +27,19 @@ public class Pushka : MonoBehaviour
         duloHingeJoint = dulo.GetComponent<HingeJoint>();
     }
 
-    public Vector3 getDuloRotatePoint()
+    public void move(float horizontal)
     {
-        return dulo.transform.position;
+        this.moveSpeed = -horizontal * moveHorizSpeedMultiplier;
     }
 
-    public void moveHorizontal(float worldCoordX)
+    public void rotateDuloRight()
     {
-        Vector3 curPos = platformToMove.position;
-        curPos.x = worldCoordX;
-        platformToMove.position = curPos;
+        rotateDulo(1f);
     }
 
-    public void rotateDulo(float angle)
+    public void rotateDuloLeft()
     {
-        duloAngle = Mathf.Clamp(angle, -90, 90);
+        rotateDulo(-1f);
     }
 
     public void fire(float bulletForce)
@@ -43,22 +48,26 @@ public class Pushka : MonoBehaviour
         isFire = true;
     }
 
-    void Update()
+    public float getDuloAngle()
     {
-        updatePlatformToMovePosition();
+        return duloAngle;
+    }
+
+    private void rotateDulo(float direction)
+    {
+        duloAngle = Mathf.Clamp(duloAngle + direction * duloRotateSpeedMultiplier * Time.deltaTime, -90, 90);
     }
 
     void FixedUpdate()
     {
+        updateMove();
         updateRotateDulo();
         updateFire();
     }
 
-    private void updatePlatformToMovePosition()
+    private void updateMove()
     {
-        Vector3 curPos = platformToMove.position;
-        curPos.y = root.position.y;
-        platformToMove.position = curPos;
+        koleso.AddTorque(Vector3.forward * this.moveSpeed * Time.deltaTime, ForceMode.VelocityChange);
     }
 
     private void updateRotateDulo()
